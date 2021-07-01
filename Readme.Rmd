@@ -2,7 +2,7 @@
 title: "Tarea Calificada"
 author: "BNicasio"
 date: "6/29/2021"
-output: html_document
+output: github_document
 lang: es-ES
 ---
 ```{r}
