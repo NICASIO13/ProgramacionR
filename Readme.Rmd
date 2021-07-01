@@ -45,7 +45,7 @@ tibble(grupo)
 #Tiene 192 elementos
 ```
 -¿En qué posiciones del vector está la letra “A”?
-```{r echo=TRUE, r,eval=F}
+```{r, echo=TRUE, r,eval=F}
 posicion<-which(grupo=="A") “posiciones” 
 posicion
 ```
