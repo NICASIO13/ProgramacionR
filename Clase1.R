@@ -119,4 +119,6 @@ percentil
 
 #https://ryali93.github.io/ProgramacionR/
 #https://fhernanb.github.io/Manual-de-R/read.html#lectura-de-bases-de-datos-en-excel
+
 #https://bookdown.org/matiasandina/R-intro/estadistica-espacial.html#instalar-paquetes-geo-r
+install.packages('rmarkdown', dependencies = T)

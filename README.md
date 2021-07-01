@@ -1,35 +1,33 @@
-Readme
+Tarea Calificada
 ================
 BNicasio
 6/29/2021
 
-## R Markdown
+true
 
-This is an R Markdown document. Markdown is a simple formatting syntax
-for authoring HTML, PDF, and MS Word documents. For more details on
-using R Markdown see <http://rmarkdown.rstudio.com>.
+# Tarea N" 01
 
-When you click the **Knit** button a document will be generated that
-includes both content as well as the output of any embedded R code
-chunks within the document. You can embed an R code chunk like this:
+## Ejercicios Parte 1
+
+### 1\. Calcula los valores numéricos aproximados de
+
+\(a=\frac{0.3*0.5}{0.3*0.15+0.2*0.8+0.5*0.12}\)
 
 ``` r
-summary(cars)
+muestra=c(1,2,3,NA,2.8,3.1,4.9)
+media=mean(muestra,na.rm=TRUE)
+n=length(na.omit(muestra))
+varianza=round(var(muestra,na.rm=TRUE)*(n-1)/n,3)
+desv.tipica=round(sqrt(varianza),3)
 ```
 
-    ##      speed           dist       
-    ##  Min.   : 4.0   Min.   :  2.00  
-    ##  1st Qu.:12.0   1st Qu.: 26.00  
-    ##  Median :15.0   Median : 36.00  
-    ##  Mean   :15.4   Mean   : 42.98  
-    ##  3rd Qu.:19.0   3rd Qu.: 56.00  
-    ##  Max.   :25.0   Max.   :120.00
-
-## Including Plots
-
-You can also embed plots, for example:
-
-![](Readme_files/figure-gfm/pressure-1.png)<!-- -->
-
-Note that the `echo = FALSE` parameter was added to the code chunk to
-prevent printing of the R code that generated the plot.
+Las raíces de la ecuación \(x^2= 2\) son \(x=\sqrt{ 2}\) y $x=- $; en
+general, las raíces de \(ax^2+b x+c=0\), con \(a\neq 0\), vienen dadas
+por la fórmula \[
+x=\frac{-b\pm\sqrt{b^2-4 a c}}{2a}.
+\] \[
+\left(\begin{array}{ccc}
+a_{1,1} & a_{1,2} & a_{1,3}\\
+a_{2,1} & a_{2,2} & a_{2,3}
+\end{array}\right)
+\]
