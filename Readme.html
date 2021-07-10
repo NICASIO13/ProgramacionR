@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="es-ES" xml:lang="es-ES">
+<html>
 
 <head>
 
@@ -362,33 +362,39 @@ pre code {
 <div id="calcula-los-valores-numéricos-aproximados-de" class="section level3">
 <h3>1. Calcula los valores numéricos aproximados de</h3>
 <p>Resolver <span class="math inline">\(a=\frac{0.3*0.5}{0.3*0.15+0.2*0.8+0.5*0.12}\)</span></p>
-<pre><code>## [1] 0.5660377</code></pre>
+<pre><code>[1] 0.5660377</code></pre>
 <p>Resolver <span class="math inline">\(b=\frac{5^6}{6!}e^-5\)</span></p>
-<pre><code>## [1] 0.1462228</code></pre>
+<pre><code>[1] 0.1462228</code></pre>
 <p>Resolver <span class="math inline">\(c={20 \choose 7}0.5^{7}0.6^{13}\)</span></p>
-<pre><code>## [1] 0.1658823</code></pre>
+<pre><code>[1] 0.1658823</code></pre>
 </div>
 <div id="realizar-la-siguiente-suma" class="section level3">
 <h3>2. Realizar la siguiente suma</h3>
 <p>Resolver a. <span class="math inline">\(1 + 2 + 3 + ... + 1000\)</span></p>
-<pre><code>## [1] 500500</code></pre>
+<pre><code>[1] 500500</code></pre>
 <p>Resolver a. <span class="math inline">\(1 + 2 + 4 + 8 + 16 + ... + 1024\)</span></p>
-<pre><code>## [1] 262656</code></pre>
+<pre><code>[1] 262656</code></pre>
 </div>
 <div id="el-vector-grupo-representa-el-grupo-al-que-pertenece-una-serie-de-alumnos" class="section level3">
 <h3>3. El vector <em>grupo</em> representa el grupo al que pertenece una serie de alumnos</h3>
 <p>-¿Cuántos elementos tiene?</p>
-<pre class="r"><code>library(tidyverse)
-tibble(grupo)
-Tiene 192 elementos</code></pre>
+<pre><code>  [1] &quot;B&quot; &quot;A&quot; &quot;E&quot; &quot;D&quot; &quot;B&quot; &quot;D&quot; &quot;D&quot; &quot;A&quot; &quot;D&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot; &quot;B&quot; &quot;E&quot; &quot;E&quot; &quot;E&quot; &quot;A&quot; &quot;B&quot;
+ [19] &quot;C&quot; &quot;C&quot; &quot;A&quot; &quot;C&quot; &quot;C&quot; &quot;D&quot; &quot;D&quot; &quot;E&quot; &quot;E&quot; &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;C&quot; &quot;E&quot; &quot;D&quot; &quot;C&quot; &quot;E&quot; &quot;E&quot;
+ [37] &quot;E&quot; &quot;E&quot; &quot;D&quot; &quot;D&quot; &quot;D&quot; &quot;E&quot; &quot;E&quot; &quot;E&quot; &quot;D&quot; &quot;E&quot; &quot;B&quot; &quot;E&quot; &quot;D&quot; &quot;C&quot; &quot;E&quot; &quot;D&quot; &quot;E&quot; &quot;E&quot;
+ [55] &quot;C&quot; &quot;B&quot; &quot;D&quot; &quot;C&quot; &quot;E&quot; &quot;D&quot; &quot;E&quot; &quot;B&quot; &quot;D&quot; &quot;B&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;C&quot; &quot;C&quot; &quot;C&quot; &quot;E&quot; &quot;D&quot;
+ [73] &quot;E&quot; &quot;D&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot; &quot;E&quot; &quot;C&quot; &quot;D&quot; &quot;C&quot; &quot;E&quot; &quot;D&quot; &quot;A&quot; &quot;B&quot; &quot;B&quot; &quot;E&quot; &quot;E&quot; &quot;C&quot; &quot;D&quot;
+ [91] &quot;C&quot; &quot;E&quot; &quot;E&quot; &quot;C&quot; &quot;E&quot; &quot;D&quot; &quot;D&quot; &quot;D&quot; &quot;E&quot; &quot;D&quot; &quot;A&quot; &quot;D&quot; &quot;B&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot; &quot;A&quot;
+[109] &quot;E&quot; &quot;E&quot; &quot;A&quot; &quot;C&quot; &quot;E&quot; &quot;D&quot; &quot;A&quot; &quot;D&quot; &quot;D&quot; &quot;C&quot; &quot;E&quot; &quot;E&quot; &quot;E&quot; &quot;D&quot; &quot;A&quot; &quot;E&quot; &quot;E&quot; &quot;E&quot;
+[127] &quot;C&quot; &quot;C&quot; &quot;B&quot; &quot;C&quot; &quot;C&quot; &quot;D&quot; &quot;C&quot; &quot;B&quot; &quot;C&quot; &quot;A&quot; &quot;D&quot; &quot;E&quot; &quot;D&quot; &quot;E&quot; &quot;E&quot; &quot;B&quot; &quot;E&quot; &quot;E&quot;
+[145] &quot;E&quot; &quot;E&quot; &quot;C&quot; &quot;B&quot; &quot;D&quot; &quot;D&quot; &quot;E&quot; &quot;E&quot; &quot;D&quot; &quot;D&quot; &quot;E&quot; &quot;D&quot; &quot;E&quot; &quot;D&quot; &quot;D&quot; &quot;C&quot; &quot;D&quot; &quot;D&quot;
+[163] &quot;D&quot; &quot;C&quot; &quot;E&quot; &quot;D&quot; &quot;E&quot; &quot;C&quot; &quot;E&quot; &quot;B&quot; &quot;C&quot; &quot;C&quot; &quot;C&quot; &quot;D&quot; &quot;D&quot; &quot;B&quot; &quot;D&quot; &quot;B&quot; &quot;E&quot; &quot;C&quot;
+[181] &quot;E&quot; &quot;D&quot; &quot;D&quot; &quot;E&quot; &quot;D&quot; &quot;B&quot; &quot;B&quot; &quot;E&quot; &quot;E&quot; &quot;A&quot; &quot;C&quot; &quot;A&quot;</code></pre>
+<pre><code>[1] 192</code></pre>
 <p>-¿En qué posiciones del vector está la letra “A”?</p>
-<pre class="r"><code>posicion&lt;-which(grupo==&quot;A&quot;) “posiciones” 
-posicion</code></pre>
 </div>
 <div id="el-vector-nota-representa-la-nota-de-un-examen-de-los-alumnos-que-están-en-los-grupos-del-vector-grupo." class="section level3">
 <h3>4. El vector <em>nota</em> representa la nota de un examen de los alumnos que están en los grupos del vector <em>grupo</em>.</h3>
 <p>-¿Cuanto suman todas las notas?</p>
-<pre class="r"><code>sum(nota) </code></pre>
 <p>-¿Cual es la media aritmética de todas las notas?</p>
 <p>-¿En qué posiciones están las notas mayores de 7.0?</p>
 <p>-Visualiza las notas ordenadas de mayor a menor ¿En qué posición está la nota máxima?</p>
@@ -421,8 +427,8 @@ posicion</code></pre>
 <p>-Si la primera medida fue a las 00:00. ¿A qué hora del día se alcanzó la concentración máxima?</p>
 </div>
 </div>
-<div id="parte-2" class="section level2">
-<h2>Parte 2</h2>
+<div id="ejercicios-parte-2" class="section level2">
+<h2>Ejercicios Parte 2</h2>
 <div id="graficar-los-puntos-1124364852563674986198110100-en-un-plano-utilizando-rstudio." class="section level3">
 <h3>1. Graficar los puntos (1,1),(2,4),(3,6),(4,8),(5,25),(6,36),(7,49),(8,61),(9,81),(10,100) en un plano utilizando RStudio.</h3>
 </div>
@@ -487,12 +493,6 @@ A=
   1 &amp; 0 &amp; 1 &amp; 1 &amp; 0 \\
 \end{pmatrix}\]</span>
 <p>Calcular <span class="math inline">\(A \cdot B - A B^t\)</span></p>
-<pre class="r"><code>B&lt;- matrix(1:50,nrow = 10, ncol = 5)
-A&lt;- matrix(c(0,1,0,0,1,1,0,1,1,0,0,1,0,0,1,1,0,1,0,1,0,1,0,1,0),nrow = 5,ncol = 5)
-a1&lt;-(B%*%A)
-b1&lt;- t(B)
-c1&lt;-A%*%b1
-r&lt;-a1 - c1</code></pre>
 </div>
 <div id="considere" class="section level3">
 <h3>12. Considere</h3>

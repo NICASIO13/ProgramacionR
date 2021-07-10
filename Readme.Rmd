@@ -2,51 +2,60 @@
 title: "Tarea Calificada"
 author: "BNicasio"
 date: "6/29/2021"
-output: github_document
-lang: es-ES
+output: html_document
 ---
+```{r setup,include=FALSE}
+knitr::opts_chunk$set(echo = FALSE ,message = TRUE,warning = TRUE,eval = FALSE,
+                      comment = '', fig.width = 6, fig.height = 6,progress = TRUE,
+                      verbose = TRUE)
+library(tidyverse)
+load("C:/Users/Brayan/Documents/GitHub/ProgramacionR/data.RData")
+```
 ```{r}
-
+summary(cars)
+data("msleep")
+```
+```{r}
+msleep
 ```
 
 # Tarea N" 01
 ## Ejercicios Parte 1
 ### 1. Calcula los valores numéricos aproximados de
 Resolver $a=\frac{0.3*0.5}{0.3*0.15+0.2*0.8+0.5*0.12}$
-```{r,eval=TRUE,echo=FALSE}
+```{r,eval=TRUE}
 a<- (0.3*0.5)/(0.3*0.15+0.2*0.8+0.5*0.12)
 a #eval: muestra respuesta, echo: muestra procedimiento
 ```
 Resolver $b=\frac{5^6}{6!}e^-5$
-```{r,eval=TRUE,echo=FALSE}
+```{r,eval=TRUE}
 b<-(exp(-5)*5**6)/factorial(6)
 b
 ```
 Resolver  $c={20 \choose 7}0.5^{7}0.6^{13}$
-```{r,eval=TRUE,echo=FALSE}
+```{r,eval=TRUE}
 c<-choose(20,7)*(0.4**7)*(0.6**13)
 c
 ```
 ### 2. Realizar la siguiente suma
 Resolver a. $1 + 2 + 3 + ... + 1000$
-```{r,eval=TRUE,echo=FALSE}
+```{r,eval=TRUE}
 sum(1:1000)
 ```
 Resolver a. $1 + 2 + 4 + 8 + 16 + ... + 1024$
-```{r,eval=TRUE,echo=FALSE}
+```{r,eval=TRUE}
 sum(seq(2,1024,2))
 ```
 ### 3. El vector *grupo* representa el grupo al que pertenece una serie de alumnos
 -¿Cuántos elementos tiene?
-```{r, error=FALSE, message=FALSE, eval=T}
+```{r,eval=T}
 grupo
-library(tidyverse)
-tibble(grupo)
-#Tiene 192 elementos
+leng<-length(grupo)
+leng
 ```
 -¿En qué posiciones del vector está la letra “A”?
-```{r, echo=TRUE, r,eval=F}
-posicion<-which(grupo=="A") “posiciones” 
+```{r}
+posicion<-which(grupo=="A")  
 posicion
 ```
 ### 4. El vector *nota* representa la nota de un examen de los alumnos que están en los grupos del vector *grupo*.
@@ -153,7 +162,7 @@ A= \begin{pmatrix}
   1 & 0 & 1 & 1 & 0 \\
 \end{pmatrix}
 Calcular $A \cdot B - A B^t$
-```{r,eval=FALSE}
+```{r}
 B<- matrix(1:50,nrow = 10, ncol = 5)
 A<- matrix(c(0,1,0,0,1,1,0,1,1,0,0,1,0,0,1,1,0,1,0,1,0,1,0,1,0),nrow = 5,ncol = 5)
 a1<-(B%*%A)

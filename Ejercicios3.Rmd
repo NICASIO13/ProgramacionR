@@ -1,0 +1,134 @@
+---
+title: "Ejercicios3"
+author: "Grupo 3 - BNicasio"
+date: "7/2/2021"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, message = F, warning = F)
+library(tidyverse)
+ppDay<- read.csv("https://raw.githubusercontent.com/ryali93/ProgramacionR/master/data/raingaugeDataset.csv", sep = ",")
+lista<- read.csv("https://raw.githubusercontent.com/ryali93/ProgramacionR/master/data/listRaingauge.csv", sep = ",")
+```
+
+# Ejercicios Parte 3
+## 15. Manipule los dataframe según se solicite
+Se tiene el conjuntos de datos de precipitación diaria (período 1980 - 2013) de ciertas estaciones meteorológicas (**raingaugeDataset.csv**), donde cada una de estas están asociadas a un código único (**p.e. qc00000208**). Asimismo, se tiene una lista con los nombres, códigos, coordenadas y elevación de cada una de las estaciones (**listRaingauge.csv**).
+A cada grupo le corresponde la siguiente estación:
+
+- **Grupo 01**: MALLARES
+- **Grupo 02**: TABACONAS
+- **Grupo 03**: PUERTO PIZARRO
+- **Grupo 04**: MORROPON
+- **Grupo 05**: SAN MIGUEL
+- **Grupo 06**: CHULUCANAS
+- **Grupo 07**: LAMBAYEQUE
+- **Grupo 08**: EL LIMON
+- **Grupo 09**: EL SALTO
+- **Grupo 10**: CHUSIS
+
+De lo descrito anteriormente, se solicita:
+```{r}
+dat<- tibble(lista) %>% 
+  filter(NOM_EST == "PUERTO PIZARRO") %>% #Ubicamos en codigo de la ESTACION
+  select(CODIGO)
+```
+```{r, echo= T}
+#Código de estacion de trabajo
+dat
+```
+
+```{r}
+estacion<- tibble(ppDay) %>% 
+  select(date, qc00000132) %>%   #Seleccionamos "date" y "Estacion por el codigo"
+  mutate(date = as.Date(date, format = "%d/%m/%Y")) %>% #Cambiamos el formato de fecha
+  rename(Fecha = date, pp = qc00000132)  #Renombramos
+```
+```{r, echo=TRUE}
+#Seleccionamosla estacion, cambio de nombres (Estacion, Date)
+tibble(estacion)
+```
+```{r}
+#Verificamos los datos
+seq(as.Date("1980-01-01"),as.Date("2013-12-31"), by = "day") %>% 
+  length()
+estacion<- tibble(ppDay) %>% 
+  select(date, qc00000132) %>%   #Seleccionamos "date" y "Estacion por el codigo"
+  mutate(date = as.Date(date, format = "%d/%m/%Y")) %>% #Cambiamos el formato de fecha
+  rename(Fecha = date, pp = qc00000132) %>%   #Renombramos
+  arrange(Fecha)  #Total de datos
+#Sale todo BIEN :)
+```
+
+** *
+a) Determine la cantidad de **missing values** de la serie de tiempo a paso diario.
+```{r, echo=TRUE}
+tibble::tibble(ppDay) %>% 
+  select(2:21) %>% 
+  summarise_all(funs(sum(is.na(.)))) # Cntidad "NA"por cada estacion 
+#summarise_all(ppDay, funs(sum(is.na(.)))) #Cantidad NA por cada columna
+sum(summarise_all(estacion, funs(sum(is.na(.)))))  #Total de "NA" en la estacion "Puerto Pizarro"
+```
+b) Calcule la serie de tiempo de precipitación **acumulada mensual** (si el # de días con missing values, en un mes, supera el 10%, la precipitación acumulada mensual será considerado como un **`NA`**).
+```{r}
+ppMPizarro<-
+  estacion %>% 
+  group_by(Fecha = str_sub(Fecha,1,7)) %>% 
+  mutate(
+    missVal = sum(is.na(pp))*100/n()    #porcentaje de DATOS faltantes
+  ) %>% 
+  summarise(
+    pp = sum(pp, na.rm = T),
+    missVal = unique(missVal)          #Precipitacion acumulada
+  ) %>% 
+  mutate(
+    pp = ifelse(missVal>=10,NA,pp),    #NA, cuando superan o son mayor a 10%
+    Fecha = as.Date(sprintf("%1$s-01", Fecha)),
+    Mes = str_sub(Fecha, 6, 7)
+  )
+ppMPizarro
+```
+c) Determine la cantidad de **missing values** de la serie de tiempo a paso mensual.
+```{r}
+sum(summarise_all(ppMPizarro, funs(sum(is.na(.)))))
+```
+d) Cree una función que calcule, a partir de los datos de preicpitación mensual, la **climatología (Ene-Dic)** para el **período 1980-2010**.
+```{r}
+
+ppM80_10<- tibble(ppDay) %>% 
+  select(date, qc00000132) %>%   #Seleccionamos "date" y "Estacion por el codigo"
+  mutate(date = as.Date(date, format = "%d/%m/%Y")) %>% #Cambiamos el formato de fecha
+  rename(Fecha = date, pp = qc00000132) %>%   #Renombramos
+  filter(Fecha>="1980-01-01",Fecha<="2010-12-31") %>%   #SOLO de 1980 a 2010
+  group_by(Fecha = str_sub(Fecha,1,7)) %>%   #Agrupamos  por Año y Mes
+  mutate(
+    missVal = sum(is.na(pp))*100/n()    #porcentaje de DATOS faltantes
+  ) %>% 
+  summarise(
+    pp = sum(pp, na.rm = T),
+    missVal = unique(missVal)          #Precipitacion acumulada
+  ) %>% 
+  mutate(
+    pp = ifelse(missVal>=10,NA,pp),    #NA, cuando superan o son mayor a 10%
+    Fecha = as.Date(sprintf("%1$s-01", Fecha)),
+    Mes = str_sub(Fecha, 6, 7)
+  )
+ggplot(ppM80_10, aes(Fecha,pp))+
+  geom_line()
+#view(ppM80_10)
+```
+e) Poltear (boxplot) la variabilidad de los valores mensuales (Ene-Dic) para el período 1980-2013.
+```{r}
+ppMPizarro
+boxplot(`pp` ~ `Mes`,ppMPizarro, col = palette(rainbow(12)))
+ggplot(ppMPizarro, aes(Mes,pp))+
+  geom_boxplot()+
+  theme_bw()+
+  scale_x_discrete(
+    labels = month.abb
+  )
+
+#view(est80_10)
+```
+
