@@ -1,6 +1,6 @@
 Ejercicios3
 ================
-Grupo 3 - BNicasio
+Grupo 3
 7/2/2021
 
 # Ejercicios Parte 3
@@ -29,6 +29,12 @@ estación:
 De lo descrito anteriormente, se solicita:
 
 ``` r
+dat<- tibble(lista) %>% 
+  filter(NOM_EST == "PUERTO PIZARRO") %>% #Ubicamos en codigo de la ESTACION
+  select(CODIGO)
+```
+
+``` r
 #Código de estacion de trabajo
 dat
 ```
@@ -37,6 +43,13 @@ dat
     ##   CODIGO    
     ##   <chr>     
     ## 1 qc00000132
+
+``` r
+estacion<- tibble(ppDay) %>% 
+  select(date, qc00000132) %>%   #Seleccionamos "date" y "Estacion por el codigo"
+  mutate(date = as.Date(date, format = "%d/%m/%Y")) %>% #Cambiamos el formato de fecha
+  rename(Fecha = date, pp = qc00000132)  #Renombramos
+```
 
 ``` r
 #Seleccionamosla estacion, cambio de nombres (Estacion, Date)
@@ -58,7 +71,22 @@ tibble(estacion)
     ## 10 1980-01-10   0  
     ## # ... with 12,409 more rows
 
+``` r
+#Verificamos los datos
+seq(as.Date("1980-01-01"),as.Date("2013-12-31"), by = "day") %>% 
+  length()
+```
+
     ## [1] 12419
+
+``` r
+estacion<- tibble(ppDay) %>% 
+  select(date, qc00000132) %>%   #Seleccionamos "date" y "Estacion por el codigo"
+  mutate(date = as.Date(date, format = "%d/%m/%Y")) %>% #Cambiamos el formato de fecha
+  rename(Fecha = date, pp = qc00000132) %>%   #Renombramos
+  arrange(Fecha)  #Total de datos
+#Sale todo BIEN :)
+```
 
 -----
 
@@ -95,6 +123,25 @@ sum(summarise_all(estacion, funs(sum(is.na(.)))))  #Total de "NA" en la estacion
 
 <!-- end list -->
 
+``` r
+ppMPizarro<-
+  estacion %>% 
+  group_by(Fecha = str_sub(Fecha,1,7)) %>% 
+  mutate(
+    missVal = sum(is.na(pp))*100/n()    #porcentaje de DATOS faltantes
+  ) %>% 
+  summarise(
+    pp = sum(pp, na.rm = T),
+    missVal = unique(missVal)          #Precipitacion acumulada
+  ) %>% 
+  mutate(
+    pp = ifelse(missVal>=10,NA,pp),    #NA, cuando superan o son mayor a 10%
+    Fecha = as.Date(sprintf("%1$s-01", Fecha)),
+    Mes = str_sub(Fecha, 6, 7)
+  )
+ppMPizarro
+```
+
     ## # A tibble: 408 x 4
     ##    Fecha         pp missVal Mes  
     ##    <date>     <dbl>   <dbl> <chr>
@@ -115,16 +162,55 @@ sum(summarise_all(estacion, funs(sum(is.na(.)))))  #Total de "NA" en la estacion
 
 <!-- end list -->
 
+``` r
+sum(summarise_all(ppMPizarro, funs(sum(is.na(.)))))
+```
+
     ## [1] 15
 
 4)  Cree una función que calcule, a partir de los datos de preicpitación
     mensual, la **climatología (Ene-Dic)** para el **período
     1980-2010**.
-    ![](Ejercicios3_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+<!-- end list -->
+
+``` r
+ppM80_10<- tibble(ppDay) %>% 
+  select(date, qc00000132) %>%   #Seleccionamos "date" y "Estacion por el codigo"
+  mutate(date = as.Date(date, format = "%d/%m/%Y")) %>% #Cambiamos el formato de fecha
+  rename(Fecha = date, pp = qc00000132) %>%   #Renombramos
+  filter(Fecha>="1980-01-01",Fecha<="2010-12-31") %>%   #SOLO de 1980 a 2010
+  group_by(Fecha = str_sub(Fecha,1,7)) %>%   #Agrupamos  por Año y Mes
+  mutate(
+    missVal = sum(is.na(pp))*100/n()    #porcentaje de DATOS faltantes
+  ) %>% 
+  summarise(
+    pp = sum(pp, na.rm = T),
+    missVal = unique(missVal)          #Precipitacion acumulada
+  ) %>% 
+  mutate(
+    pp = ifelse(missVal>=10,NA,pp),    #NA, cuando superan o son mayor a 10%
+    Fecha = as.Date(sprintf("%1$s-01", Fecha)),
+    Mes = str_sub(Fecha, 6, 7)
+  )
+ggplot(ppM80_10, aes(Fecha,pp))+
+  geom_line()
+```
+
+![](Ejercicios3_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+``` r
+#view(ppM80_10)
+```
+
 5)  Poltear (boxplot) la variabilidad de los valores mensuales (Ene-Dic)
     para el período 1980-2013.
 
 <!-- end list -->
+
+``` r
+ppMPizarro
+```
 
     ## # A tibble: 408 x 4
     ##    Fecha         pp missVal Mes  
@@ -141,4 +227,23 @@ sum(summarise_all(estacion, funs(sum(is.na(.)))))  #Total de "NA" en la estacion
     ## 10 1980-10-01   4.7    0    10   
     ## # ... with 398 more rows
 
-![](Ejercicios3_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->![](Ejercicios3_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->
+``` r
+boxplot(`pp` ~ `Mes`,ppMPizarro, col = palette(rainbow(12)))
+```
+
+![](Ejercicios3_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+``` r
+ggplot(ppMPizarro, aes(Mes,pp))+
+  geom_boxplot()+
+  theme_bw()+
+  scale_x_discrete(
+    labels = month.abb
+  )
+```
+
+![](Ejercicios3_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->
+
+``` r
+#view(est80_10)
+```
