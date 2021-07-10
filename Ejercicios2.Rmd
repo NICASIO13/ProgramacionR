@@ -90,6 +90,7 @@ solve(sol,x)
 ```
 ## 10. Utilizando la ayuda de R, investigue para qué sirven las funciones `eigen()` y `det()`
 ```{r}
+# Eigen() Los eigenvectors de una matriz son todos aquellos vectores que, al multiplicarlos por dicha matriz, resultan en el mismo vector o en un múltiplo entero del mismo.
 # det() es la determinante
 ```
 
