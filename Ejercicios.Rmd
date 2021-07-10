@@ -1,6 +1,6 @@
 ---
 title: "Tarea"
-author: "Grupo 3 - BNicasio"
+author: "Grupo 3"
 date: "7/1/2021"
 
 

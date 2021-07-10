@@ -1,6 +1,6 @@
 ---
 title: "Ejercicios3"
-author: "Grupo 3 - BNicasio"
+author: "Grupo 3"
 date: "7/2/2021"
 output: github_document
 ---
