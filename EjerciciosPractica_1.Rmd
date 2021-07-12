@@ -1,0 +1,458 @@
+---
+title: "Ejercicios_Practica_1"
+author: "Grupo 3"
+date: "7/11/2021"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
+library(tidyverse)
+load("C:/Users/Brayan/Documents/GitHub/ProgramacionR/data.RData")
+ppDay<- read.csv("https://raw.githubusercontent.com/ryali93/ProgramacionR/master/data/raingaugeDataset.csv", sep = ",")
+lista<- read.csv("https://raw.githubusercontent.com/ryali93/ProgramacionR/master/data/listRaingauge.csv", sep = ",")
+```
+
+
+|  Nro   |         Integrante          |
+| -----  | --------------------------- |
+|  1     | Nicasio Castañeda Brayan    |
+|  2     | Palomino Torres Fiorella    |
+|  3     | Torre Sulca Stefany Nicole  |
+|  4     | Zumarán Miranda Daniel      |
+
+
+# EJERCICIOS PARTE 1
+
+Cargar las variables almacenadas en el siguiente archivo [Rdata](https://goo.gl/uDzU8v)
+
+### 1. Calcula los valores numéricos aproximados de:
+a) $\frac{0.3 \cdot 0.15}{0.3 \cdot 0.15 + 0.2 \cdot 0.8 + 0.5 \cdot 0.12}$
+```{r}
+a<- (0.3*0.5)/(0.3*0.15+0.2*0.8+0.5*0.12)
+a #eval: muestra respuesta, echo: muestra procedimiento
+```
+b) $\frac{5^6}{6!} e^{-5}$
+```{r}
+b<-(exp(-5)*5**6)/factorial(6)
+b
+```
+c) $\begin{pmatrix} 20 \\ 7 \end{pmatrix} 0.4^7  0.6^{13}$
+```{r}
+c<-choose(20,7)*(0.4**7)*(0.6**13)
+c
+```
+### 2. Realizar la siguiente suma
+a) $1+2+3+...+1000$
+```{r}
+sum(1:1000)
+```
+b) $1+2+4+8+16+...+1024$
+```{r}
+sum(seq(2,1024,2))       #Creamos una secuencia cada "2" y sumamos
+```
+### 3. El vector  `grupo` representa el grupo al que pertenece una serie de alumnos
+a) ¿Cuántos elementos tiene?
+```{r}
+tibble(grupo) %>%            #Cantidad de datos
+  count()
+```
+b) ¿En qué posiciones del vector está la letra "A"?
+```{r}
+tibble(grupo) %>% 
+  mutate(orden = 1:n(), grupo = grupo) %>% #Agregamos una columna de posicion
+  filter(grupo == "A")                     #Filtramos solo "A"
+```
+### 4. El vector `nota` representa la nota de un examen de los alumnos que están en los grupos del vector `grupo`.
+a) ¿Cuanto suman todas las notas?
+```{r}
+sum(nota)                            #Sumamos las notas
+```
+b) ¿Cual es la media aritmética de todas las notas?
+```{r}
+median(nota)                         #Media de las notas
+```
+c) ¿En qué posiciones están las notas mayores de *7.0*?
+```{r}
+tibble(nota) %>% 
+  mutate(orden = 1:n() , nota =nota) %>% #Agregamos una columna de posicion
+  filter(nota>7)                         #Notas mayores de "7"
+```
+d) Visualiza las notas ordenadas de mayor a menor
+```{r}
+tibble(grupo,nota) %>%                   #Unimos "Grupo" y "Nota"
+  arrange(nota) %>%                     #Ordenamos de mmenor a mayor NOTAS
+  mutate(Orden = 1:n())                 #Agregamos posicion
+```
+e) ¿En qué posición está la nota máxima?
+```{r}
+tibble(nota) %>% 
+  mutate(orden = 1:n() , nota =nota) %>%   #Agregamos posicion
+  slice_max(nota)                         #Seleccionamos la maxima "Nota"
+```
+
+### 5. A partir de los vectores `grupo` y `nota` definidos.
+a) Suma las notas de los 10 primeros alumnos del vector
+```{r}
+sum(nota[1:10])                             #Sumamos los primeros 10
+```
+b) ¿Cuántos alumnos hay del grupo *C*?
+```{r}
+tibble(grupo) %>% 
+  filter(grupo == "C") %>%                 #Filtramos solo "C"
+  count()                                  #Contamos
+```
+c) ¿Cuántos alumnos han aprobado?
+```{r}
+tibble(nota) %>% 
+  filter(nota >= 5.1) %>%                 #Filtramos solo "C"
+  count()                                  #Contamos
+```
+d) ¿Cuántos alumnos del grupo *B* han aprobado?
+```{r}
+tibble(grupo, nota) %>% 
+  filter(nota >= 5.1 ,grupo == "B") %>%   #Filtramos Aprobado y solo "B"
+  count() 
+```
+
+e) ¿Qué porcentaje de alumnos del grupo *C* han aprobado?
+```{r}
+(tibble(grupo, nota) %>%
+  filter(nota >= 5.1 ,grupo == "C") %>%   #Filtramos Aprobado y solo "B"
+  count()/tibble(grupo) %>%
+  filter(grupo == "C") %>%   #Filtramos solo "C"
+  count())*100
+
+```
+f) ¿De qué grupos son la máxima y mínima notas de toda la muestra?
+```{r}
+tibble(grupo,nota) %>%    
+  slice_max(nota)      #Maxima nota
+```
+```{r}
+tibble(grupo,nota) %>%    
+  slice_min(nota)      #Minima nota
+```
+g) Nota media de los alumnos de grupo *A* y *B*, juntos, considerando sólo a los que han aprobado.
+```{r}
+tibble(grupo, nota) %>% 
+  filter(grupo == "A" & nota > 5|         #Grupo A y Aprobado
+         grupo == "B" & nota > 5) %>%     #Grupo B y Aprobado
+  summarise(mean(nota))                   #Media
+```
+### 6. Calcula el percentil 66 de las notas de todos los alumnos, y también de los alumnos del grupo C.
+```{r}
+quantile(nota, c(0.66))    #Percentil 66
+```
+```{r}
+tibble(grupo, nota) %>% 
+  filter(grupo == "C") %>%       #Filtramos solo C
+  summarise(quantile(nota, c(0.66)))  #Percentil 66
+
+```
+### 7. Un alumno tiene una nota de 4.9. ¿Qué porcentaje, del total de alumnos, tiene una nota menor o igual que la suya? ¿Y qué porcentaje tiene una nota mayor o igual que la suya?
+```{r}
+(tibble(nota) %>%
+  filter(nota <= 4.9) %>%   #Filtramos Nota menor a 4.9
+  count()/tibble(grupo) %>%
+  count())*100   
+```
+```{r}
+(tibble(nota) %>%
+  filter(nota >= 4.9) %>%   #Filtramos Nota mayor a 4.9
+  count()/tibble(grupo) %>%
+  count())*100  
+```
+### 8. Realiza el gráfico de diagramas de caja de las notas de cada grupo, para poder comparar el nivel de cada uno de ellos.
+```{r}
+df<- tibble(grupo,nota)
+boxplot(`nota` ~ `grupo`,df, col = palette(rainbow(4)))
+```
+
+### 9. Si la variable `conc` recoge la concentración de plomo (en ppm) en el aire de cierta zona durante un día completo.
+
+a) ¿Cuál ha sido la concentración máxima?
+```{r}
+tibble(conc) %>% 
+  slice_max(conc)
+```
+b) ¿En cuántos de los muestreos se ha superado la concentración de 40.0 ppm?
+```{r}
+tibble(conc) %>% 
+  filter(conc > 40) %>% 
+  count()
+```
+c) ¿Cuál ha sido la concentración media del día?
+```{r}
+tibble(conc) %>% 
+  summarise(median(conc))
+```
+d) ¿Cuáles fueron las 10 mediciones más bajas del día?
+```{r}
+tibble(conc) %>%                   #Unimos "Grupo" y "Nota"
+  arrange(conc)
+```
+e) Si la primera medida fue a las 00:00. ¿A qué hora del día se alcanzó la concentración máxima?
+```{r}
+#Hora<- seq(0,24-1/12,1/12)
+Hora<-seq(as.POSIXct("2020-01-01 00:00"),as.POSIXct("2020-01-01 23:55"),by="5 min") #Secuencia cada 5 minutos
+length(Hora)
+tibble(Hora,conc) %>%   #Unimos Hora y CONC
+  slice_max(conc)       #Encontramos el valor maximo
+#seq(as.double())
+seq(as.POSIXct("2020-01-01 00:00"),as.POSIXct("2020-01-01 23:00"),by="5 min")
+```
+
+# EJERCICIOS PARTE 2
+
+## 1. Graficar los puntos 
+$(1,1),(2,4),(3,6),(4,8),(5,25),(6,36),(7,49),(8,64),(9,81),(10,100)$ en un plano utilizando RStudio.
+```{r}
+xs<- 1:10
+ys<-xs*xs
+plot(x = xs, y = ys)
+```
+
+## 2. Ingresar la matriz A en RStudio
+$A = \begin{pmatrix} 1 & 2 & 3 \\ 2 & 4 & 6 \\ 3 & 6 & 9 \\ 4 & 8 & 12  \end{pmatrix}$
+```{r}
+A<- matrix(1:12, nrow = 4, ncol = 3 )
+A
+```
+## 3. Ingresar la matriz identidad de tamaño 3
+$I = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1  \end{pmatrix}$
+```{r}
+I<- diag(3)
+I
+```
+##  4. Crea una función que cree una matriz nula ingresando las dimensiones
+```{r}
+mat<- function(n){  # "n" sera la dimension
+  nula<-diag(n);    #diagional = dimension
+  for (i in 1:n) {  #
+    nula[i,i]=0;
+    return(nula)
+    
+  }
+}
+mat(4)
+```
+## 5. Modificar la matriz `diag(4)`, para que se parezca a la matriz B
+$B = \begin{pmatrix} 0 & 0 & 0 & 0 \\ 0 & 2 & 0 & 0 \\ 0 & 0 & 3 & 0 \\ 0 & 0 & 0 & 4  \end{pmatrix}$
+```{r}
+B<-diag(4)
+B[1,1]=0
+B[2,2]=2
+B[3,3]=3
+B[4,4]=4
+B
+```
+## 6. Obtener la matriz transpuesta de A (ejercicio 2)
+```{r}
+A<- matrix(1:12, nrow = 4, ncol = 3 )
+t(A)
+```
+## 7. Realizar las siguientes operaciones 
+$A + B$, $A - B$, $3B$ y $AB$
+```{r}
+A<-matrix(c(1:12,rep(0,4)), nrow = 4 , ncol = 4)
+B<-matrix(c(0,0,0,0,2,0,0,0,0,3,0,0,0,0,0,4),ncol=4)
+(A+B)
+(A-B)
+(3*B)
+(A*B)
+```
+## 8. Crea una función para calcular $P^6$
+$P = \begin{pmatrix} 1 & 2 & 3 \\ -2 & 4 & -2 \\ 1 & 0 & 1  \end{pmatrix}$
+```{r}
+P<-matrix(c(1,-2,1,2,4,0,3,-2,1),ncol=3)
+P
+PM<-function(M,n){
+  S=M;
+  for(i in 2:n){
+    S=S%*%M};
+print(S)}
+PM(P,6)
+```
+## 9. Resolver el sistema de ecuaciones
+$3x - y + z  = -1\\9x - 2y + z = -9\\3x + y - 2z = -9$
+```{r}
+sol<- matrix(c(3,9,3,-1,-2,1,1,1,-2), nrow = 3,ncol = 3)
+x<- c(-1,-9,-9)
+solve(sol,x)
+```
+## 10. Utilizando la ayuda de R, investigue para qué sirven las funciones `eigen()` y `det()`
+```{r}
+# Eigen() Los eigenvectors de una matriz son todos aquellos vectores que, al multiplicarlos por dicha matriz, resultan en el mismo vector o en un múltiplo entero del mismo.
+# det() es la determinante
+```
+
+
+## 11. Considerando las matrices
+
+$$B=\begin{pmatrix} 
+1 & 2 & 3 & 4 & 5 \\
+2 & 4 & 6 & 8 & 10 \\
+3 & 6 & 9 & 12 & 15 \\
+4 & 8 & 12 & 16 & 20 \\
+5 & 10 & 15 & 20 & 25 \\
+6 & 12 & 18 & 24 & 30 \\
+7 & 14 & 21 & 28 & 35 \\
+8 & 16 & 24 & 32 & 40 \\
+9 & 18 & 27 & 36 & 45 \\
+10 & 20 & 30 & 40 & 50
+\end{pmatrix}$$
+
+$$A = \begin{pmatrix}
+  0 & 1 & 0 & 1 & 0 \\
+  1 & 0 & 1 & 0 & 1 \\
+  0 & 1 & 0 & 1 & 0 \\
+  0 & 1 & 0 & 0 & 1 \\
+  1 & 0 & 1 & 1 & 0 \\
+\end{pmatrix}$$
+Calcular $A \cdot B - A B^t$
+```{r}
+A1<- matrix(1:50,nrow = 10, ncol = 5)
+B1<- matrix(c(0,1,0,0,1,1,0,1,1,0,0,1,0,0,1,1,0,1,0,1,0,1,0,1,0),nrow = 5,ncol = 5)
+(A1 %*% B1)-(A1 %*% t(B1))
+```
+
+## 12. Considere
+$\hat\beta = (X^t \cdot X)^{-1} \cdot X^t \cdot Y$
+Determine la matriz 
+$\hat\beta$
+$x=\begin{pmatrix}1 & 1\\ 1 & -1\\ 1 & 0\\ 1 & 1\\ 1 & 2\\ \end{pmatrix}$
+$y = \begin{pmatrix}0\\0\\1\\1\\3\\\end{pmatrix}$
+```{r}
+X<- matrix(c(1,1,1,1,1,1,-1,0,1,2), nrow = 5, ncol = 2)
+Y<- matrix(c(0,0,1,1,3), nrow = 5, ncol = 1)
+I<- diag(5)
+t(X)%*%I%*%Y # %*% MULTIPLICAR matrices
+```
+
+
+# Ejercicios Parte 3
+
+## 15. Manipule los dataframe según se solicite
+Se tiene el conjuntos de datos de precipitación diaria (período 1980 - 2013) de ciertas estaciones meteorológicas (**raingaugeDataset.csv**), donde cada una de estas están asociadas a un código único (**p.e. qc00000208**). Asimismo, se tiene una lista con los nombres, códigos, coordenadas y elevación de cada una de las estaciones (**listRaingauge.csv**).
+A cada grupo le corresponde la siguiente estación:
+
+- **Grupo 01**: MALLARES
+- **Grupo 02**: TABACONAS
+- **Grupo 03**: PUERTO PIZARRO
+- **Grupo 04**: MORROPON
+- **Grupo 05**: SAN MIGUEL
+- **Grupo 06**: CHULUCANAS
+- **Grupo 07**: LAMBAYEQUE
+- **Grupo 08**: EL LIMON
+- **Grupo 09**: EL SALTO
+- **Grupo 10**: CHUSIS
+
+De lo descrito anteriormente, se solicita:
+```{r}
+dat<- tibble(lista) %>% 
+  filter(NOM_EST == "PUERTO PIZARRO") %>% #Ubicamos en codigo de la ESTACION
+  select(CODIGO)
+```
+```{r, echo= T}
+#Código de estacion de trabajo
+dat
+```
+
+```{r}
+estacion<- tibble(ppDay) %>% 
+  select(date, qc00000132) %>%   #Seleccionamos "date" y "Estacion por el codigo"
+  mutate(date = as.Date(date, format = "%d/%m/%Y")) %>% #Cambiamos el formato de fecha
+  rename(Fecha = date, pp = qc00000132)  #Renombramos
+```
+```{r, echo=TRUE}
+#Seleccionamosla estacion, cambio de nombres (Estacion, Date)
+tibble(estacion)
+```
+
+```{r}
+#Verificamos los datos
+seq(as.Date("1980-01-01"),as.Date("2013-12-31"), by = "day") %>% 
+  length()
+estacion<- tibble(ppDay) %>% 
+  select(date, qc00000132) %>%   #Seleccionamos "date" y "Estacion por el codigo"
+  mutate(date = as.Date(date, format = "%d/%m/%Y")) %>% #Cambiamos el formato de fecha
+  rename(Fecha = date, pp = qc00000132) %>%   #Renombramos
+  arrange(Fecha)  #Total de datos
+#Sale todo BIEN :)
+```
+
+** *
+a) Determine la cantidad de **missing values** de la serie de tiempo a paso diario.
+```{r, echo=TRUE}
+tibble::tibble(ppDay) %>% 
+  select(2:21) %>% 
+  summarise_all(funs(sum(is.na(.)))) # Cntidad "NA"por cada estacion 
+#summarise_all(ppDay, funs(sum(is.na(.)))) #Cantidad NA por cada columna
+sum(summarise_all(estacion, funs(sum(is.na(.)))))  #Total de "NA" en la estacion "Puerto Pizarro"
+```
+b) Calcule la serie de tiempo de precipitación **acumulada mensual** (si el # de días con missing values, en un mes, supera el 10%, la precipitación acumulada mensual será considerado como un **`NA`**).
+```{r}
+ppMPizarro<-
+  estacion %>% 
+  group_by(Fecha = str_sub(Fecha,1,7)) %>% 
+  mutate(
+    missVal = sum(is.na(pp))*100/n()    #porcentaje de DATOS faltantes
+  ) %>% 
+  summarise(
+    pp = sum(pp, na.rm = T),
+    missVal = unique(missVal)          #Precipitacion acumulada
+  ) %>% 
+  mutate(
+    pp = ifelse(missVal>=10,NA,pp),    #NA, cuando superan o son mayor a 10%
+    Fecha = as.Date(sprintf("%1$s-01", Fecha)),
+    Mes = str_sub(Fecha, 6, 7)
+  )
+ppMPizarro
+```
+
+c) Determine la cantidad de **missing values** de la serie de tiempo a paso mensual.
+```{r}
+sum(summarise_all(ppMPizarro, funs(sum(is.na(.))))) #Punto es para que evalue todo.
+```
+d) Cree una función que calcule, a partir de los datos de preicpitación mensual, la **climatología (Ene-Dic)** para el **período 1980-2010**.
+```{r}
+
+ppM80_10<- tibble(ppDay) %>% 
+  select(date, qc00000132) %>%   #Seleccionamos "date" y "Estacion por el codigo"
+  mutate(date = as.Date(date, format = "%d/%m/%Y")) %>% #Cambiamos el formato de fecha
+  rename(Fecha = date, pp = qc00000132) %>%   #Renombramos
+  filter(Fecha>="1980-01-01",Fecha<="2010-12-31") %>%   #SOLO de 1980 a 2010
+  group_by(Fecha = str_sub(Fecha,1,7)) %>%   #Agrupamos  por Año y Mes
+  mutate(
+    missVal = sum(is.na(pp))*100/n()    #porcentaje de DATOS faltantes
+  ) %>% 
+  summarise(
+    pp = sum(pp, na.rm = T),
+    missVal = unique(missVal)          #Precipitacion acumulada
+  ) %>% 
+  mutate(
+    pp = ifelse(missVal>=10,NA,pp),    #NA, cuando superan o son mayor a 10%
+    Fecha = as.Date(sprintf("%1$s-01", Fecha)),
+    Mes = str_sub(Fecha, 6, 7)
+  )
+ggplot(ppM80_10, aes(Fecha,pp))+
+  geom_line()
+#view(ppM80_10)
+```
+
+
+e) Poltear (boxplot) la variabilidad de los valores mensuales (Ene-Dic) para el período 1980-2013.
+```{r}
+ppMPizarro
+boxplot(`pp` ~ `Mes`,ppMPizarro, col = palette(rainbow(12)))
+ggplot(ppMPizarro, aes(Mes,pp))+
+  geom_boxplot()+
+  theme_bw()+
+  scale_x_discrete(
+    labels = month.abb
+  )
+
+#view(est80_10)
+```
+
